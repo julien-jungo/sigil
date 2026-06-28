@@ -16,10 +16,14 @@ Angular SPA  →  Spring Boot (auth | user | audit)  →  PostgreSQL
 sigil/
 ├── frontend/                        # Angular + Tailwind SPA
 │   └── src/app/
-│       ├── auth/                    # Login page, token storage
-│       ├── users/                   # User management UI
-│       ├── tokens/                  # Token explorer & JWKS viewer
-│       └── audit/                   # Audit log viewer
+│       ├── core/                    # Services, interceptors, models
+│       │   └── auth/                # Auth service, guard, token storage
+│       ├── features/                # Feature modules
+│       │   ├── login/               # Login page
+│       │   ├── users/               # User management UI
+│       │   ├── tokens/              # Token explorer & JWKS viewer
+│       │   └── audit/               # Audit log viewer
+│       └── shared/                  # Shared UI components (nav)
 └── backend/                         # Spring Boot application
     └── src/main/java/dev/sigil/
         ├── auth/                    # JWT issuance, RS256 keypair, JWKS, introspection
