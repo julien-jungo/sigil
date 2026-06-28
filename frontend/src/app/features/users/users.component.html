@@ -9,6 +9,10 @@
     </button>
   </div>
 
+  @if (error()) {
+    <p class="text-sm text-red-600 mb-4">{{ error() }}</p>
+  }
+
   @if (showForm()) {
     <form (ngSubmit)="create()" class="bg-white border rounded-xl p-4 mb-6 flex gap-3 items-end">
       <div class="flex flex-col gap-1">

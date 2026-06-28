@@ -14,14 +14,22 @@ export class TokensComponent {
   protected tokenInput = '';
   protected result = signal<IntrospectResponse | null>(null);
   protected jwks = signal<JwkSet | null>(null);
+  protected error = signal<string | null>(null);
 
   private svc = inject(TokenService);
 
   introspect() {
-    this.svc.introspect(this.tokenInput.trim()).subscribe((res) => this.result.set(res));
+    this.error.set(null);
+    this.svc.introspect(this.tokenInput.trim()).subscribe({
+      next: (res) => this.result.set(res),
+      error: () => this.error.set('Failed to introspect token'),
+    });
   }
 
   loadJwks() {
-    this.svc.jwks().subscribe((jwks) => this.jwks.set(jwks));
+    this.svc.jwks().subscribe({
+      next: (jwks) => this.jwks.set(jwks),
+      error: () => this.error.set('Failed to load JWKS'),
+    });
   }
 }

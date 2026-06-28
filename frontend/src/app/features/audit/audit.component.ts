@@ -11,6 +11,7 @@ import { AuditService } from './audit.service';
 export class AuditComponent implements OnInit {
   protected entries = signal<AuditEntry[]>([]);
   protected nextCursor = signal<string | null>(null);
+  protected error = signal<string | null>(null);
 
   private svc = inject(AuditService);
 
@@ -19,9 +20,12 @@ export class AuditComponent implements OnInit {
   }
 
   private load(cursor?: string) {
-    this.svc.list(cursor).subscribe((page) => {
-      this.entries.update((prev) => (cursor ? [...prev, ...page.entries] : page.entries));
-      this.nextCursor.set(page.next_cursor);
+    this.svc.list(cursor).subscribe({
+      next: (page) => {
+        this.entries.update((prev) => (cursor ? [...prev, ...page.entries] : page.entries));
+        this.nextCursor.set(page.next_cursor);
+      },
+      error: () => this.error.set('Failed to load audit log'),
     });
   }
 

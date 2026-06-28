@@ -26,6 +26,7 @@ public class SecurityConfig {
         "/api/v1/auth/introspect",
         "/.well-known/jwks.json",
         "/actuator/health",
+        "/actuator/prometheus",
         "/swagger-ui/**",
         "/v3/api-docs/**",
     };

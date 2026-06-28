@@ -49,10 +49,7 @@ public class UserController {
                                         .body(ProblemDetail.forStatusAndDetail(
                                                 HttpStatus.CONFLICT,
                                                 "Username already exists: " + c.username()));
-                        case UserError.NotFound n ->
-                                ResponseEntity.status(HttpStatus.NOT_FOUND)
-                                        .body(ProblemDetail.forStatusAndDetail(
-                                                HttpStatus.NOT_FOUND, "Not found: " + n.username()));
+                        case UserError.NotFound n -> throw new IllegalStateException("unreachable");
                     };
         };
     }
@@ -70,11 +67,7 @@ public class UserController {
                                 ResponseEntity.status(HttpStatus.NOT_FOUND)
                                         .body(ProblemDetail.forStatusAndDetail(
                                                 HttpStatus.NOT_FOUND, "User not found: " + n.username()));
-                        case UserError.UsernameConflict c ->
-                                ResponseEntity.status(HttpStatus.CONFLICT)
-                                        .body(ProblemDetail.forStatusAndDetail(
-                                                HttpStatus.CONFLICT,
-                                                "Username conflict: " + c.username()));
+                        case UserError.UsernameConflict c -> throw new IllegalStateException("unreachable");
                     };
         };
     }
