@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard, adminGuard, guestGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'audit', pathMatch: 'full' },
+  { path: '', redirectTo: 'tokens', pathMatch: 'full' },
   {
     path: 'login',
     canActivate: [guestGuard],
@@ -21,8 +21,8 @@ export const routes: Routes = [
   },
   {
     path: 'audit',
-    canActivate: [authGuard],
+    canActivate: [authGuard, adminGuard],
     loadComponent: () => import('./features/audit/audit.component').then((m) => m.AuditComponent),
   },
-  { path: '**', redirectTo: 'audit' },
+  { path: '**', redirectTo: 'tokens' },
 ];

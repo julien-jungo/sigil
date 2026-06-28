@@ -40,7 +40,7 @@ class UserServiceTest {
         when(repository.existsByUsername("alice")).thenReturn(false);
         when(repository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        var result = userService.create(new CreateUserRequest("alice", "pw", "VIEWER"));
+        var result = userService.create(new CreateUserRequest("alice", "pw", Role.VIEWER));
 
         assertThat(result).isInstanceOf(Result.Ok.class);
         var user = ((Result.Ok<User, ?>) result).value();
@@ -52,7 +52,7 @@ class UserServiceTest {
     void createFailsOnDuplicateUsername() {
         when(repository.existsByUsername("alice")).thenReturn(true);
 
-        var result = userService.create(new CreateUserRequest("alice", "pw", "VIEWER"));
+        var result = userService.create(new CreateUserRequest("alice", "pw", Role.VIEWER));
 
         assertThat(result).isInstanceOf(Result.Err.class);
         assertThat(((Result.Err<?, UserError>) result).error())
@@ -79,7 +79,7 @@ class UserServiceTest {
         when(repository.findById(id)).thenReturn(Optional.of(user));
         when(repository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        var result = userService.update(id, new UpdateUserRequest(Optional.of("ADMIN"), Optional.empty()));
+        var result = userService.update(id, new UpdateUserRequest(Optional.of(Role.ADMIN), Optional.empty()));
 
         assertThat(result).isInstanceOf(Result.Ok.class);
         assertThat(((Result.Ok<User, ?>) result).value().getRole()).isEqualTo(Role.ADMIN);
