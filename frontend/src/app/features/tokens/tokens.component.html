@@ -1,0 +1,66 @@
+<div class="max-w-3xl mx-auto">
+  <h1 class="text-xl font-bold mb-6">Token Explorer</h1>
+
+  <div class="flex gap-2 mb-6 border-b">
+    <button
+      (click)="tab.set('introspect')"
+      class="pb-2 px-1 text-sm font-medium border-b-2 -mb-px"
+      [class]="
+        tab() === 'introspect'
+          ? 'border-gray-900 text-gray-900'
+          : 'border-transparent text-gray-400'
+      "
+    >
+      Introspect
+    </button>
+    <button
+      (click)="loadJwks(); tab.set('jwks')"
+      class="pb-2 px-1 text-sm font-medium border-b-2 -mb-px"
+      [class]="
+        tab() === 'jwks' ? 'border-gray-900 text-gray-900' : 'border-transparent text-gray-400'
+      "
+    >
+      JWKS
+    </button>
+  </div>
+
+  @if (tab() === 'introspect') {
+    <div class="flex flex-col gap-4">
+      <textarea
+        [(ngModel)]="tokenInput"
+        name="token"
+        rows="4"
+        placeholder="Paste a JWT here…"
+        class="border rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-gray-900 resize-none"
+      ></textarea>
+      <button
+        (click)="introspect()"
+        class="self-start bg-gray-900 text-white text-sm px-4 py-2 rounded-lg hover:bg-gray-700"
+      >
+        Introspect
+      </button>
+
+      @if (result()) {
+        <div class="bg-gray-50 border rounded-xl p-4">
+          @if (result()!.active) {
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <span class="text-gray-500">Active</span
+              ><span class="font-medium text-green-600">Yes</span>
+              <span class="text-gray-500">Subject</span
+              ><span class="font-mono text-xs">{{ result()!.sub }}</span>
+              <span class="text-gray-500">Role</span><span>{{ result()!.role }}</span>
+              <span class="text-gray-500">Expires</span
+              ><span>{{ result()!.exp | slice: 0 : 19 }}</span>
+            </div>
+          } @else {
+            <p class="text-sm text-red-600 font-medium">Token is inactive or invalid</p>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  @if (tab() === 'jwks') {
+    <pre class="bg-gray-50 border rounded-xl p-4 text-xs overflow-auto">{{ jwks() | json }}</pre>
+  }
+</div>
