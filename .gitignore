@@ -37,7 +37,8 @@ node_modules/
 .pnp.*
 
 # JVM / Kotlin / Gradle
-.gradle/
+**/.gradle/
+**/build/
 *.class
 *.jar
 *.war

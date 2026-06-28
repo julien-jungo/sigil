@@ -1,0 +1,49 @@
+<div class="max-w-4xl mx-auto">
+  <h1 class="text-xl font-bold mb-6">Audit Log</h1>
+
+  @if (error()) {
+    <p class="text-sm text-red-600 mb-4">{{ error() }}</p>
+  }
+
+  <div class="bg-white border rounded-xl overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+        <tr>
+          <th class="px-4 py-3 text-left">Event</th>
+          <th class="px-4 py-3 text-left">Actor</th>
+          <th class="px-4 py-3 text-left">Target</th>
+          <th class="px-4 py-3 text-left">Time</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y">
+        @for (entry of entries(); track entry.id) {
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3">
+              <span class="px-2 py-0.5 rounded text-xs font-mono bg-gray-100">{{
+                entry.event_type
+              }}</span>
+            </td>
+            <td class="px-4 py-3 font-mono text-xs text-gray-500">
+              {{ entry.actor_id ?? '—' }}
+            </td>
+            <td class="px-4 py-3 font-mono text-xs text-gray-500">
+              {{ entry.target_id ?? '—' }}
+            </td>
+            <td class="px-4 py-3 text-gray-500">{{ entry.occurred_at | slice: 0 : 19 }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (nextCursor()) {
+    <div class="mt-4 flex justify-center">
+      <button
+        (click)="loadMore()"
+        class="text-sm text-gray-600 hover:text-gray-900 border rounded-lg px-4 py-2"
+      >
+        Load more
+      </button>
+    </div>
+  }
+</div>
