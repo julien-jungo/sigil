@@ -10,6 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 @Tag("integration")
 class SigilApplicationTests {
 
-    @Test
-    void contextLoads() {}
+  @Test
+  void contextLoads() {}
 }

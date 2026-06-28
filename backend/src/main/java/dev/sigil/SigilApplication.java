@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class SigilApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(SigilApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(SigilApplication.class, args);
+  }
 }

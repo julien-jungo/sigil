@@ -14,19 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/audit")
 public class AuditController {
 
-    private final AuditService auditService;
+  private final AuditService auditService;
 
-    public AuditController(AuditService auditService) {
-        this.auditService = auditService;
-    }
+  public AuditController(AuditService auditService) {
+    this.auditService = auditService;
+  }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public AuditPageResponse list(
-            @RequestParam Optional<String> cursor,
-            @RequestParam(defaultValue = "50") int limit) {
-        var page = auditService.findPage(cursor, limit);
-        var entries = page.entries().stream().map(AuditEntryResponse::from).toList();
-        return new AuditPageResponse(entries, page.nextCursor());
-    }
+  @GetMapping
+  @PreAuthorize("hasRole('ADMIN')")
+  public AuditPageResponse list(
+      @RequestParam Optional<String> cursor, @RequestParam(defaultValue = "50") int limit) {
+    var page = auditService.findPage(cursor, limit);
+    var entries = page.entries().stream().map(AuditEntryResponse::from).toList();
+    return new AuditPageResponse(entries, page.nextCursor());
+  }
 }

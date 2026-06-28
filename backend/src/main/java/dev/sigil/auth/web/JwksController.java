@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class JwksController {
 
-    private final KeypairProvider keypairProvider;
+  private final KeypairProvider keypairProvider;
 
-    public JwksController(KeypairProvider keypairProvider) {
-        this.keypairProvider = keypairProvider;
-    }
+  public JwksController(KeypairProvider keypairProvider) {
+    this.keypairProvider = keypairProvider;
+  }
 
-    @GetMapping("/.well-known/jwks.json")
-    public Map<String, Object> jwks() {
-        return keypairProvider.jwkSet().toJSONObject();
-    }
+  @GetMapping("/.well-known/jwks.json")
+  public Map<String, Object> jwks() {
+    return keypairProvider.jwkSet().toJSONObject();
+  }
 }

@@ -16,46 +16,46 @@ import java.util.UUID;
 @Table(name = "audit_events")
 public class AuditEntry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private AuditEvent.EventType eventType;
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private AuditEvent.EventType eventType;
 
-    private UUID actorID;
+  private UUID actorID;
 
-    private UUID targetID;
+  private UUID targetID;
 
-    @Column(nullable = false, updatable = false)
-    private Instant occurredAt = Instant.now();
+  @Column(nullable = false, updatable = false)
+  private Instant occurredAt = Instant.now();
 
-    protected AuditEntry() {}
+  protected AuditEntry() {}
 
-    public AuditEntry(AuditEvent.EventType eventType, UUID actorID, UUID targetID) {
-        this.eventType = eventType;
-        this.actorID = actorID;
-        this.targetID = targetID;
-    }
+  public AuditEntry(AuditEvent.EventType eventType, UUID actorID, UUID targetID) {
+    this.eventType = eventType;
+    this.actorID = actorID;
+    this.targetID = targetID;
+  }
 
-    public UUID getID() {
-        return id;
-    }
+  public UUID getID() {
+    return id;
+  }
 
-    public AuditEvent.EventType getEventType() {
-        return eventType;
-    }
+  public AuditEvent.EventType getEventType() {
+    return eventType;
+  }
 
-    public UUID getActorID() {
-        return actorID;
-    }
+  public UUID getActorID() {
+    return actorID;
+  }
 
-    public UUID getTargetID() {
-        return targetID;
-    }
+  public UUID getTargetID() {
+    return targetID;
+  }
 
-    public Instant getOccurredAt() {
-        return occurredAt;
-    }
+  public Instant getOccurredAt() {
+    return occurredAt;
+  }
 }

@@ -109,7 +109,7 @@ tasks.named("check") {
 
 spotless {
     java {
-        googleJavaFormat("1.25.2")
+        googleJavaFormat("1.27.0")
         removeUnusedImports()
         trimTrailingWhitespace()
     }

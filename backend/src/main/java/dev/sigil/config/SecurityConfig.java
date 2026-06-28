@@ -20,47 +20,44 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private static final String[] PUBLIC_PATHS = {
-        "/api/v1/health",
-        "/api/v1/auth/login",
-        "/api/v1/auth/introspect",
-        "/.well-known/jwks.json",
-        "/actuator/health",
-        "/actuator/prometheus",
-        "/swagger-ui/**",
-        "/v3/api-docs/**",
-    };
+  private static final String[] PUBLIC_PATHS = {
+    "/api/v1/health",
+    "/api/v1/auth/login",
+    "/api/v1/auth/introspect",
+    "/.well-known/jwks.json",
+    "/actuator/health",
+    "/actuator/prometheus",
+    "/swagger-ui/**",
+    "/v3/api-docs/**",
+  };
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter)
-            throws Exception {
-        return http.csrf(csrf -> csrf.disable())
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(
-                        auth ->
-                                auth.requestMatchers(PUBLIC_PATHS)
-                                        .permitAll()
-                                        .anyRequest()
-                                        .authenticated())
-                .oauth2ResourceServer(
-                        oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
-                .build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(
+      HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
+    return http.csrf(csrf -> csrf.disable())
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(
+            auth -> auth.requestMatchers(PUBLIC_PATHS).permitAll().anyRequest().authenticated())
+        .oauth2ResourceServer(
+            oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)))
+        .build();
+  }
 
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        var converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            var role = jwt.getClaimAsString("role");
-            if (role == null) return List.of();
-            return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+  @Bean
+  public JwtAuthenticationConverter jwtAuthenticationConverter() {
+    var converter = new JwtAuthenticationConverter();
+    converter.setJwtGrantedAuthoritiesConverter(
+        jwt -> {
+          var role = jwt.getClaimAsString("role");
+          if (role == null) return List.of();
+          return List.of(new SimpleGrantedAuthority("ROLE_" + role));
         });
-        return converter;
-    }
+    return converter;
+  }
 
-    @Bean
-    public JwtDecoder jwtDecoder(KeypairProvider keypairProvider) {
-        return NimbusJwtDecoder.withPublicKey((RSAPublicKey) keypairProvider.publicKey()).build();
-    }
+  @Bean
+  public JwtDecoder jwtDecoder(KeypairProvider keypairProvider) {
+    return NimbusJwtDecoder.withPublicKey((RSAPublicKey) keypairProvider.publicKey()).build();
+  }
 }

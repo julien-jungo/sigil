@@ -13,26 +13,26 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class MdcFilter extends OncePerRequestFilter {
 
-    private final Tracer tracer;
+  private final Tracer tracer;
 
-    public MdcFilter(Tracer tracer) {
-        this.tracer = tracer;
-    }
+  public MdcFilter(Tracer tracer) {
+    this.tracer = tracer;
+  }
 
-    @Override
-    protected void doFilterInternal(
-            HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
-        var span = tracer.currentSpan();
-        if (span != null) {
-            MDC.put("traceId", span.context().traceId());
-            MDC.put("spanId", span.context().spanId());
-        }
-        try {
-            chain.doFilter(request, response);
-        } finally {
-            MDC.remove("traceId");
-            MDC.remove("spanId");
-        }
+  @Override
+  protected void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+      throws ServletException, IOException {
+    var span = tracer.currentSpan();
+    if (span != null) {
+      MDC.put("traceId", span.context().traceId());
+      MDC.put("spanId", span.context().spanId());
     }
+    try {
+      chain.doFilter(request, response);
+    } finally {
+      MDC.remove("traceId");
+      MDC.remove("spanId");
+    }
+  }
 }

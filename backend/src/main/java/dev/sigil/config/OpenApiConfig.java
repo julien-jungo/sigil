@@ -12,17 +12,14 @@ import org.springframework.context.annotation.Profile;
 @Profile("local")
 public class OpenApiConfig {
 
-    @Bean
-    public OpenAPI openAPI() {
-        var bearerScheme =
-                new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT");
+  @Bean
+  public OpenAPI openAPI() {
+    var bearerScheme =
+        new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT");
 
-        return new OpenAPI()
-                .info(new Info().title("Sigil API").version("v1"))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-                .schemaRequirement("bearerAuth", bearerScheme);
-    }
+    return new OpenAPI()
+        .info(new Info().title("Sigil API").version("v1"))
+        .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+        .schemaRequirement("bearerAuth", bearerScheme);
+  }
 }

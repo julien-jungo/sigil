@@ -10,27 +10,27 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
+  private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
-    private final UserService userService;
-    private final String adminUsername;
-    private final String adminPassword;
+  private final UserService userService;
+  private final String adminUsername;
+  private final String adminPassword;
 
-    public DataInitializer(
-            UserService userService,
-            @Value("${sigil.admin.username:admin}") String adminUsername,
-            @Value("${sigil.admin.password:}") String adminPassword) {
-        this.userService = userService;
-        this.adminUsername = adminUsername;
-        this.adminPassword = adminPassword;
+  public DataInitializer(
+      UserService userService,
+      @Value("${sigil.admin.username:admin}") String adminUsername,
+      @Value("${sigil.admin.password:}") String adminPassword) {
+    this.userService = userService;
+    this.adminUsername = adminUsername;
+    this.adminPassword = adminPassword;
+  }
+
+  @Override
+  public void run(String... args) {
+    if (adminPassword.isBlank()) {
+      log.warn("SIGIL_ADMIN_PASSWORD not set — skipping admin account bootstrap");
+      return;
     }
-
-    @Override
-    public void run(String... args) {
-        if (adminPassword.isBlank()) {
-            log.warn("SIGIL_ADMIN_PASSWORD not set — skipping admin account bootstrap");
-            return;
-        }
-        userService.createAdminIfAbsent(adminUsername, adminPassword);
-    }
+    userService.createAdminIfAbsent(adminUsername, adminPassword);
+  }
 }

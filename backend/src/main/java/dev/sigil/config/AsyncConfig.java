@@ -9,9 +9,9 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 @Configuration
 public class AsyncConfig implements AsyncConfigurer {
 
-    @Override
-    @Bean(name = "taskExecutor")
-    public Executor getAsyncExecutor() {
-        return Executors.newVirtualThreadPerTaskExecutor();
-    }
+  @Override
+  @Bean(name = "taskExecutor")
+  public Executor getAsyncExecutor() {
+    return Executors.newVirtualThreadPerTaskExecutor();
+  }
 }

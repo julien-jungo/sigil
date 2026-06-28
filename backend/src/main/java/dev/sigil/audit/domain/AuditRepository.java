@@ -9,15 +9,16 @@ import org.springframework.data.repository.query.Param;
 
 public interface AuditRepository extends JpaRepository<AuditEntry, UUID> {
 
-    @Query("""
+  @Query(
+      """
             SELECT e FROM AuditEntry e
             WHERE (:cursorTs IS NULL OR e.occurredAt < :cursorTs
                 OR (e.occurredAt = :cursorTs AND e.id < :cursorId))
             ORDER BY e.occurredAt DESC, e.id DESC
             LIMIT :limit
             """)
-    List<AuditEntry> findPage(
-            @Param("cursorTs") Instant cursorTs,
-            @Param("cursorId") UUID cursorId,
-            @Param("limit") int limit);
+  List<AuditEntry> findPage(
+      @Param("cursorTs") Instant cursorTs,
+      @Param("cursorId") UUID cursorId,
+      @Param("limit") int limit);
 }

@@ -6,9 +6,9 @@ import java.security.PublicKey;
 
 public interface KeypairProvider {
 
-    PrivateKey privateKey();
+  PrivateKey privateKey();
 
-    PublicKey publicKey();
+  PublicKey publicKey();
 
-    JWKSet jwkSet();
+  JWKSet jwkSet();
 }

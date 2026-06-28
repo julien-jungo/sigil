@@ -15,32 +15,33 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Transactional
 public class AuditService {
 
-    static final int DEFAULT_PAGE_SIZE = 50;
+  static final int DEFAULT_PAGE_SIZE = 50;
 
-    private final AuditRepository repository;
+  private final AuditRepository repository;
 
-    public AuditService(AuditRepository repository) {
-        this.repository = repository;
-    }
+  public AuditService(AuditRepository repository) {
+    this.repository = repository;
+  }
 
-    @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
-    public void onAuditEvent(AuditEvent event) {
-        repository.save(new AuditEntry(event.type(), event.actorID(), event.targetID()));
-    }
+  @Async
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+  public void onAuditEvent(AuditEvent event) {
+    repository.save(new AuditEntry(event.type(), event.actorID(), event.targetID()));
+  }
 
-    @Transactional(readOnly = true)
-    public AuditPage findPage(Optional<String> cursor, int limit) {
-        var parsed = cursor.map(AuditCursor::decode);
-        var cursorTs = parsed.map(AuditCursor::occurredAt).orElse(null);
-        var cursorId = parsed.map(AuditCursor::id).orElse(null);
-        var pageSize = Math.max(1, Math.min(limit, DEFAULT_PAGE_SIZE));
-        var entries = repository.findPage(cursorTs, cursorId, pageSize);
-        var nextCursor = entries.size() == pageSize
-                ? Optional.of(AuditCursor.from(entries.getLast()).encode())
-                : Optional.<String>empty();
-        return new AuditPage(entries, nextCursor);
-    }
+  @Transactional(readOnly = true)
+  public AuditPage findPage(Optional<String> cursor, int limit) {
+    var parsed = cursor.map(AuditCursor::decode);
+    var cursorTs = parsed.map(AuditCursor::occurredAt).orElse(null);
+    var cursorId = parsed.map(AuditCursor::id).orElse(null);
+    var pageSize = Math.max(1, Math.min(limit, DEFAULT_PAGE_SIZE));
+    var entries = repository.findPage(cursorTs, cursorId, pageSize);
+    var nextCursor =
+        entries.size() == pageSize
+            ? Optional.of(AuditCursor.from(entries.getLast()).encode())
+            : Optional.<String>empty();
+    return new AuditPage(entries, nextCursor);
+  }
 
-    public record AuditPage(List<AuditEntry> entries, Optional<String> nextCursor) {}
+  public record AuditPage(List<AuditEntry> entries, Optional<String> nextCursor) {}
 }
