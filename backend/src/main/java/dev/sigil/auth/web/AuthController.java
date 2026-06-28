@@ -56,7 +56,8 @@ public class AuthController {
             return unauthorized();
         }
         var user = ((Result.Ok<dev.sigil.user.domain.User, ?>) userResult).value();
-        if (!user.isEnabled() || !passwordService.matches(request.password(), user.getPasswordHash())) {
+        var passwordOk = passwordService.matches(request.password(), user.getPasswordHash());
+        if (!user.isEnabled() || !passwordOk) {
             events.publishEvent(new AuditEvent(AuditEvent.EventType.LOGIN_FAILURE, user.getID(), null));
             return unauthorized();
         }
