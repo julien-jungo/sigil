@@ -24,7 +24,7 @@ public class AuditService {
     }
 
     @Async
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
     public void onAuditEvent(AuditEvent event) {
         repository.save(new AuditEntry(event.type(), event.actorID(), event.targetID()));
     }

@@ -30,6 +30,8 @@ public class AuthController {
     private final PasswordService passwordService;
     private final TokenService tokenService;
     private final ApplicationEventPublisher events;
+    private static final String DUMMY_HASH = "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy";
+
     private final long expirySeconds;
 
     public AuthController(
@@ -49,6 +51,7 @@ public class AuthController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
         var userResult = userService.findByUsername(request.username());
         if (userResult instanceof Result.Err<?, ?>) {
+            passwordService.matches(request.password(), DUMMY_HASH);
             events.publishEvent(new AuditEvent(AuditEvent.EventType.LOGIN_FAILURE, null, null));
             return unauthorized();
         }
