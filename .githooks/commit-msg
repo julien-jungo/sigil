@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MSG=$(cat "$1")
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|chore|build|ci|revert)(\(.+\))?(!)?: .+'
+
+if ! echo "$MSG" | grep -qE "$PATTERN"; then
+  echo "error: commit message does not follow conventional commits format" >&2
+  echo "  expected: <type>[optional scope]: <description>" >&2
+  echo "  example:  feat(#100): add user authentication" >&2
+  echo "  types:    feat, fix, docs, style, refactor, perf, test, chore, build, ci, revert" >&2
+  exit 1
+fi

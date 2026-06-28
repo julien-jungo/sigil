@@ -1,0 +1,79 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Claude local settings
+.claude/settings.local.json
+
+# Build artifacts
+dist/
+build/
+out/
+target/
+bin/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+
+# Rust
+debug/
+Cargo.lock
+
+# Node / TypeScript
+node_modules/
+*.js.map
+*.d.ts
+.npm
+.yarn/cache
+.yarn/unplugged
+.pnp.*
+
+# JVM / Kotlin / Gradle
+.gradle/
+*.class
+*.jar
+*.war
+*.ear
+local.properties
+.kotlin/
+
+# Docker
+*.tar
+
+# Kubernetes / Skaffold
+kubeconfig
+*.kubeconfig
+skaffold-cache/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Lavish artifacts
+.lavish/
+
+# Logs & temp
+*.log
+tmp/
+.cache/
