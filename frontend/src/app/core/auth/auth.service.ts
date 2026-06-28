@@ -53,7 +53,8 @@ export class AuthService {
     const token = this._token();
     if (!token) return null;
     try {
-      return JSON.parse(atob(token.split('.')[1])) as TokenPayload;
+      const b64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(b64)) as TokenPayload;
     } catch {
       return null;
     }
