@@ -1,0 +1,18 @@
+spring:
+  jpa:
+    show-sql: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    dev.sigil: DEBUG
