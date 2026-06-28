@@ -47,6 +47,6 @@ management:
 
 sigil:
   jwt:
-    keypair-source: ${JWT_KEYPAIR_SOURCE:generated}
+    keypair-source: ${JWT_KEYPAIR_SOURCE}
     private-key: ${JWT_PRIVATE_KEY:}
     expiry-seconds: ${JWT_EXPIRY_SECONDS:3600}

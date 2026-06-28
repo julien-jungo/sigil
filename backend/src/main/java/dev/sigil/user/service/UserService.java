@@ -59,7 +59,7 @@ public class UserService {
         var user = new User(
                 request.username(),
                 passwordService.encode(request.password()),
-                Role.valueOf(request.role()));
+                request.role());
         var saved = repository.save(user);
         events.publishEvent(new AuditEvent(AuditEvent.EventType.USER_CREATED, saved.getID(), null));
         return Result.ok(saved);
@@ -69,7 +69,7 @@ public class UserService {
         return repository
                 .findById(id)
                 .map(user -> {
-                    request.role().map(Role::valueOf).ifPresent(user::setRole);
+                    request.role().ifPresent(user::setRole);
                     request.enabled().ifPresent(user::setEnabled);
                     var saved = repository.save(user);
                     events.publishEvent(

@@ -4,6 +4,7 @@ import dev.sigil.audit.service.AuditService;
 import dev.sigil.audit.web.dto.AuditEntryResponse;
 import dev.sigil.audit.web.dto.AuditPageResponse;
 import java.util.Optional;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +21,7 @@ public class AuditController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public AuditPageResponse list(
             @RequestParam Optional<String> cursor,
             @RequestParam(defaultValue = "50") int limit) {

@@ -33,10 +33,11 @@ public class AuditService {
         var parsed = cursor.map(AuditCursor::decode);
         var cursorTs = parsed.map(AuditCursor::occurredAt).orElse(null);
         var cursorId = parsed.map(AuditCursor::id).orElse(null);
-        var entries = repository.findPage(cursorTs, cursorId, Math.min(limit, DEFAULT_PAGE_SIZE));
-        var nextCursor = entries.isEmpty()
-                ? Optional.<String>empty()
-                : Optional.of(AuditCursor.from(entries.getLast()).encode());
+        var pageSize = Math.min(limit, DEFAULT_PAGE_SIZE);
+        var entries = repository.findPage(cursorTs, cursorId, pageSize);
+        var nextCursor = entries.size() == pageSize
+                ? Optional.of(AuditCursor.from(entries.getLast()).encode())
+                : Optional.<String>empty();
         return new AuditPage(entries, nextCursor);
     }
 

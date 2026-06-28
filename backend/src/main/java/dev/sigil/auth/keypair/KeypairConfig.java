@@ -10,7 +10,9 @@ public class KeypairConfig {
     public KeypairProvider keypairProvider(KeypairProperties props) {
         return switch (props.keypairSource()) {
             case "config" -> new ConfiguredKeypairProvider(props.privateKey());
-            default -> new GeneratedKeypairProvider();
+            case "generated" -> new GeneratedKeypairProvider();
+            default -> throw new IllegalStateException(
+                    "Unsupported JWT_KEYPAIR_SOURCE: '" + props.keypairSource() + "'. Use 'config' or 'generated'.");
         };
     }
 }

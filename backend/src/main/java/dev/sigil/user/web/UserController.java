@@ -31,12 +31,13 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> list() {
         return userService.findAll().stream().map(UserResponse::from).toList();
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@Valid @RequestBody CreateUserRequest request) {
         return switch (userService.create(request)) {
             case dev.sigil.common.Result.Ok<?, ?> ok ->
@@ -57,7 +58,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> update(
             @PathVariable UUID id, @RequestBody UpdateUserRequest request) {
         return switch (userService.update(id, request)) {

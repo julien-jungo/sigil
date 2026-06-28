@@ -1,5 +1,6 @@
 package dev.sigil.auth.web;
 
+import dev.sigil.auth.keypair.KeypairProperties;
 import dev.sigil.auth.service.AuthError;
 import dev.sigil.auth.service.TokenService;
 import dev.sigil.auth.web.dto.IntrospectRequest;
@@ -29,16 +30,19 @@ public class AuthController {
     private final PasswordService passwordService;
     private final TokenService tokenService;
     private final ApplicationEventPublisher events;
+    private final long expirySeconds;
 
     public AuthController(
             UserService userService,
             PasswordService passwordService,
             TokenService tokenService,
-            ApplicationEventPublisher events) {
+            ApplicationEventPublisher events,
+            KeypairProperties keypairProperties) {
         this.userService = userService;
         this.passwordService = passwordService;
         this.tokenService = tokenService;
         this.events = events;
+        this.expirySeconds = keypairProperties.expirySeconds();
     }
 
     @PostMapping("/login")
@@ -56,7 +60,7 @@ public class AuthController {
         return switch (tokenService.issue(user)) {
             case Result.Ok<String, ?> ok -> {
                 events.publishEvent(new AuditEvent(AuditEvent.EventType.LOGIN_SUCCESS, user.getID(), null));
-                yield ResponseEntity.ok(new LoginResponse(ok.value(), Instant.now().plusSeconds(3600)));
+                yield ResponseEntity.ok(new LoginResponse(ok.value(), Instant.now().plusSeconds(expirySeconds)));
             }
             case Result.Err<?, AuthError> err -> ResponseEntity.internalServerError()
                     .body(ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Token issuance failed"));

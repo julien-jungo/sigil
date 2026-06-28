@@ -21,7 +21,10 @@ const TOKEN_KEY = 'sigil_token';
 export class AuthService {
   private readonly _token = signal<string | null>(localStorage.getItem(TOKEN_KEY));
 
-  readonly isAuthenticated = computed(() => this._token() !== null);
+  readonly isAuthenticated = computed(() => {
+    const p = this.payload();
+    return p !== null && p.exp * 1000 > Date.now();
+  });
   readonly token = this._token.asReadonly();
   readonly role = computed(() => this.payload()?.role ?? null);
   readonly isAdmin = computed(() => this.role() === 'ADMIN');
