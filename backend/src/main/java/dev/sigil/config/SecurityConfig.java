@@ -1,7 +1,8 @@
 package dev.sigil.config;
 
+import dev.sigil.auth.keypair.KeypairProvider;
+import java.security.interfaces.RSAPublicKey;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -58,7 +59,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder(@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}") String jwksUri) {
-        return NimbusJwtDecoder.withJwkSetUri(jwksUri).build();
+    public JwtDecoder jwtDecoder(KeypairProvider keypairProvider) {
+        return NimbusJwtDecoder.withPublicKey((RSAPublicKey) keypairProvider.publicKey()).build();
     }
 }

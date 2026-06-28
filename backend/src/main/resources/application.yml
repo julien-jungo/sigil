@@ -19,11 +19,6 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: http://localhost:${PORT:8080}/.well-known/jwks.json
 
 logging:
   level:

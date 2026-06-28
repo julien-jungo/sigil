@@ -21,7 +21,7 @@ export class LoginComponent {
     this.loading.set(true);
     this.error.set(null);
     this.auth.login(this.username, this.password).subscribe({
-      next: () => this.router.navigate(['/audit']),
+      next: () => this.router.navigate([this.auth.isAdmin() ? '/audit' : '/tokens']),
       error: () => {
         this.error.set('Invalid username or password');
         this.loading.set(false);
